@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 public class MessengerController {
 
     @Autowired
@@ -23,13 +24,11 @@ public class MessengerController {
         return messagerService.welcome();
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/getAll")
     public List<Message> getAll() {
         return messagerService.getAll();
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/send")
     public String sendMassage(@RequestBody SendMessageDto sendMessageDto) {
         return messagerService.sendMassage(sendMessageDto);
