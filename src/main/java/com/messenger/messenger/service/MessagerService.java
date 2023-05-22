@@ -1,7 +1,6 @@
 package com.messenger.messenger.service;
 
 import com.messenger.messenger.model.Message;
-import com.messenger.messenger.model.User;
 import com.messenger.messenger.payload.SendMessageDto;
 import com.messenger.messenger.repository.MessageRepository;
 import com.messenger.messenger.repository.UserRepository;
