@@ -16,13 +16,6 @@ public class MessagerService {
     @Autowired
     private UserRepository userRepository;
     public String welcome(){
-//        User user = new User();
-//        user.setName("Test");
-//        userRepository.save(user);
-        Message message = new Message();
-        message.setMessageBody("Test body 1");
-        message.setUser(userRepository.getReferenceById(1L));
-        messageRepository.save(message);
         return "Welcome";
     }
 
