@@ -2,6 +2,7 @@ package com.messenger.messenger.model;
 
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,6 +17,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Data
+@EnableAutoConfiguration
 @Table(name = "massages")
 public class Message {
     @Id

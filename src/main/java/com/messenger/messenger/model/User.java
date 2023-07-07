@@ -1,6 +1,7 @@
 package com.messenger.messenger.model;
 
 import lombok.Data;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Data
+@EnableAutoConfiguration
 @Table(name = "User")
 public class User {
 
