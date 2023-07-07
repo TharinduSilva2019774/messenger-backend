@@ -1,3 +1,4 @@
 FROM openjdk:17
-COPY target/*.jar messenger-0.0.1-SNAPSHOT.jar
-ENTRYPOINT ["java", "-jar", "/messenger-0.0.1-SNAPSHOT.jar"]
+COPY /opt/app/messengerBackend/target/*.jar sen-app.jar
+ENTRYPOINT ["java", "-jar", "/opt/app/sen-app.jar"]
+
