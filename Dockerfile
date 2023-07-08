@@ -21,10 +21,10 @@ FROM openjdk:17
 WORKDIR /app
 
 # Copy the JAR file from the build stage to the current directory
-COPY --from=build /app/target/*.jar .
+COPY --from=build /app/target/*.jar ./sen-app.jar
 
 # Expose the port that the application will run on
 EXPOSE 8080
 
 # Set the command to run the application
-CMD ["java", "-jar", "my-application.jar"]
+CMD ["java", "-jar", "sen-app.jar"]
