@@ -1,27 +1,30 @@
-FROM maven:3.8.3-openjdk-17 AS DEPS
+# Use a base image with Java and Maven installed
+FROM maven:3.8.1-openjdk-17-slim AS build
 
-WORKDIR /opt/app
+# Set the working directory inside the container
+WORKDIR /app
 
+# Copy the pom.xml and download the dependencies
 COPY pom.xml .
-COPY ./messengerBackend/pom.xml messengerBackend/pom.xml
-
 RUN mvn dependency:go-offline -B
 
-FROM maven:3.8.3-openjdk-17 as BUILDER
+# Copy the source code to the container
+COPY src ./src
 
-WORKDIR /opt/app
+# Build the application
+RUN mvn package -DskipTests
 
-COPY --from=deps /root/.m2 /root/.m2
-COPY --from=deps /opt/app/ /opt/app
+# Create a new image with only the necessary files
+FROM openjdk:11-jre-slim
 
-COPY messengerBackend/src /opt/app/messengerBackend/src
+# Set the working directory inside the container
+WORKDIR /app
 
-RUN mvn package -B -DskipTests=true
+# Copy the JAR file from the build stage to the current directory
+COPY --from=build /app/target/my-application.jar .
 
-FROM gcr.io/distroless/java17-debian11
+# Expose the port that the application will run on
+EXPOSE 8080
 
-WORKDIR /opt/app
-
-COPY --from=builder /opt/app/leave-planner/target/*.jar sen-app.jar
-
-ENTRYPOINT ["java", "-jar", "/opt/app/sen-app.jar"]
+# Set the command to run the application
+CMD ["java", "-jar", "my-application.jar"]
