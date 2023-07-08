@@ -1,5 +1,5 @@
 # Use a base image with Java and Maven installed
-FROM maven:3.8.1-openjdk-17-alpine AS build
+FROM maven:3.8.3-openjdk-17 AS build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -15,13 +15,13 @@ COPY src ./src
 RUN mvn package -DskipTests
 
 # Create a new image with only the necessary files
-FROM openjdk:17-alpine
+FROM openjdk:17
 
 # Set the working directory inside the container
 WORKDIR /app
 
 # Copy the JAR file from the build stage to the current directory
-COPY --from=build /app/target/my-application.jar .
+COPY --from=build /app/target/*.jar .
 
 # Expose the port that the application will run on
 EXPOSE 8080
