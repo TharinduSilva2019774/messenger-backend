@@ -5,9 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SendMessageDto {
+public class SendMessageResponseDto {
 
-    private String email;
+    private Long userId;
     private String message;
 
 }

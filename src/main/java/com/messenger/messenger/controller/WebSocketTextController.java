@@ -1,7 +1,7 @@
 package com.messenger.messenger.controller;
 
 import com.messenger.messenger.model.Message;
-import com.messenger.messenger.payload.SendMessageDto;
+import com.messenger.messenger.payload.SendMessageResponseDto;
 import com.messenger.messenger.service.MessagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,19 +30,19 @@ public class WebSocketTextController {
     MessagerService messagerService;
 
     @PostMapping("/send")
-    public ResponseEntity<Void> sendMessage(@RequestBody SendMessageDto textMessageDTO) {
+    public ResponseEntity<Void> sendMessage(@RequestBody SendMessageResponseDto textMessageDTO) {
         List<Message> updatesMessages = messagerService.getAll();
         template.convertAndSend("/topic/message", updatesMessages);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @MessageMapping("/sendMessage")
-    public void receiveMessage(@Payload SendMessageDto textMessageDTO) {
+    public void receiveMessage(@Payload SendMessageResponseDto textMessageDTO) {
         // receive message from client
     }
 
     @SendTo("/topic/message")
-    public SendMessageDto broadcastMessage(@Payload SendMessageDto textMessageDTO) {
+    public SendMessageResponseDto broadcastMessage(@Payload SendMessageResponseDto textMessageDTO) {
         return textMessageDTO;
     }
 }
