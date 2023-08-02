@@ -56,7 +56,6 @@ public class WebSocketTextController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
     @MessageMapping("/sendMessage")
     public void receiveMessage(@Payload SendMessageResponseDto textMessageDTO) {
         // receive message from client
