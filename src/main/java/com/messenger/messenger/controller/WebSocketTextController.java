@@ -1,7 +1,9 @@
 package com.messenger.messenger.controller;
 
 import com.messenger.messenger.model.Message;
+import com.messenger.messenger.model.User;
 import com.messenger.messenger.payload.SendMessageResponseDto;
+import com.messenger.messenger.repository.UserRepository;
 import com.messenger.messenger.service.MessagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/websocket")
@@ -29,12 +32,30 @@ public class WebSocketTextController {
     @Autowired
     MessagerService messagerService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @PostMapping("/send")
     public ResponseEntity<Void> sendMessage(@RequestBody SendMessageResponseDto textMessageDTO) {
         List<Message> updatesMessages = messagerService.getAll();
         template.convertAndSend("/topic/message", updatesMessages);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("/typing")
+    public ResponseEntity<Void> sendMessage(@RequestBody String email) {
+        Optional<User> typingUserOpt = userRepository.findByEmail(email);
+        User typingUser;
+        if (typingUserOpt.isEmpty()) {
+            typingUser = new User();
+            typingUser.setName("Unknown");
+        } else {
+            typingUser = typingUserOpt.get();
+        }
+        template.convertAndSend("/topic/typing", typingUser);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
     @MessageMapping("/sendMessage")
     public void receiveMessage(@Payload SendMessageResponseDto textMessageDTO) {
@@ -44,5 +65,10 @@ public class WebSocketTextController {
     @SendTo("/topic/message")
     public SendMessageResponseDto broadcastMessage(@Payload SendMessageResponseDto textMessageDTO) {
         return textMessageDTO;
+    }
+
+    @SendTo("/topic/typing")
+    public User broadcastTyping(@Payload User typingUser) {
+        return typingUser;
     }
 }
